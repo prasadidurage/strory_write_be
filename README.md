@@ -78,8 +78,7 @@ Contributions are what make the open-source community such an amazing place to l
 
     Open a Pull Request
 git clone [https://github.com/prasadidurage/strory_write_be.git](https://github.com/prasadidurage/strory_write_be.git)
-cd strory_write_be
-
+Live Backend API: https://strory-write-be.onrender.com
 
 
 
