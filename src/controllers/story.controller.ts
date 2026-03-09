@@ -1,5 +1,8 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import * as storyService from "../services/story.service"
+
+const getParamValue = (value: string | string[] | undefined): string =>
+    Array.isArray(value) ? value[0] ?? '' : value ?? '';
 
 
 
@@ -22,7 +25,7 @@ export const getAllStories = async (req: Request, res: Response) => {
 
 
 export const getStory = async (req: Request, res: Response) => {
-    const storyId =  req.params.id;
+    const storyId = getParamValue(req.params.id);
     const userIdPattern = /^STORY_\d+_\d{3}$/; // USER_timestamp_randomnumber format
 
     if (!storyId || !userIdPattern.test(storyId)) {
@@ -32,9 +35,9 @@ export const getStory = async (req: Request, res: Response) => {
         return;
     }
     const story = await storyService.getStoryById(storyId)
-    if(!story){
+    if (!story) {
         res.status(404).json({
-            error : 'Story not found!!'
+            error: 'Story not found!!'
         })
         return;
     }
@@ -68,7 +71,7 @@ export const saveStory = async (req: Request, res: Response) => {
 export const getStories = async (req: Request, res: Response) => {
     try {
 
-        const categoryName = req.params.categoryName;
+        const categoryName = getParamValue(req.params.categoryName);
 
 
         if (!categoryName || categoryName.trim() === '') {
@@ -101,23 +104,23 @@ export const getStories = async (req: Request, res: Response) => {
 
 
 
-    export const updateStory = async (req: Request, res: Response) => {
+export const updateStory = async (req: Request, res: Response) => {
 
-    const storyId = req.params.id;
-        const userIdPattern = /^STORY_\d+_\d{3}$/; // USER_timestamp_randomnumber format
+    const storyId = getParamValue(req.params.id);
+    const userIdPattern = /^STORY_\d+_\d{3}$/; // USER_timestamp_randomnumber format
 
-        if (!storyId || !userIdPattern.test(storyId)) {
-            res.status(400).json({
-                error: 'Invalid STORY ID Format!!!!'
-            });
-            return;
-        }
+    if (!storyId || !userIdPattern.test(storyId)) {
+        res.status(400).json({
+            error: 'Invalid STORY ID Format!!!!'
+        });
+        return;
+    }
 
     const updatedData = req.body;
-    const updatedStory = await storyService.updateStory(storyId , updatedData)
-    if(!updatedStory){
-        res.status(404 ).json({
-            error : 'Story not found!!'
+    const updatedStory = await storyService.updateStory(storyId, updatedData)
+    if (!updatedStory) {
+        res.status(404).json({
+            error: 'Story not found!!'
         })
         return;
     }
@@ -126,7 +129,7 @@ export const getStories = async (req: Request, res: Response) => {
 }
 export const deleteStory = async (req: Request, res: Response) => {
 
-    const storyId = req.params.id;
+    const storyId = getParamValue(req.params.id);
     const userIdPattern = /^STORY_\d+_\d{3}$/; // USER_timestamp_randomnumber format
 
     if (!storyId || !userIdPattern.test(storyId)) {
@@ -136,14 +139,14 @@ export const deleteStory = async (req: Request, res: Response) => {
         return;
     }
     const deletedCategory = await storyService.deleteStory(storyId);
-    if(!deletedCategory){
+    if (!deletedCategory) {
         res.status(404).json({
-            error : 'Story not found!!'
+            error: 'Story not found!!'
         })
         return;
     }
     res.status(200).json({
-        message : 'Story deleted successfully!! '
+        message: 'Story deleted successfully!! '
     })
 }
 

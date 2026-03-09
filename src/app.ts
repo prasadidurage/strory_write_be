@@ -1,6 +1,6 @@
-import express, {Express, Request, Response} from "express";
+import express, { Express, Request, Response } from "express";
 
-import cors  from 'cors';
+import cors from 'cors';
 
 import DBConnection from "./db/DBConnection";
 import categoryRoutes from "./routes/category.routes";
@@ -9,9 +9,10 @@ import userRoutes from "./routes/user.routes";
 
 
 import authRoutes from "./routes/auth.routes";
+import commentRoutes from "./routes/comment.routes";
 
 import emailRoutes from "./routes/email.routes";
-const  app:Express = express();
+const app: Express = express();
 
 
 DBConnection().then(result => console.log(result));
@@ -29,16 +30,16 @@ const allowedOrigins = [
 ];
 
 const corsOptions = {
-    origin : (origin : string | undefined , callback :(err : Error | null , allow?: boolean) => void) => {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
         // Allow requests with no origin (like mobile apps, Postman, or same-origin)
-        if(!origin){
+        if (!origin) {
             callback(null, true);
             return;
         }
-        
-        if(allowedOrigins.includes(origin)){
+
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
-        } else{
+        } else {
             console.log(`CORS blocked origin: ${origin}`);
             callback(new Error("Not allowed by CORS"));
         }
@@ -46,16 +47,19 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
-app.use("/api/auth" ,authRoutes )
-app.use("/api/category", categoryRoutes )
-app.use("/api/story", storyRoutes )
-app.use("/api/user", userRoutes )
+app.use("/api/auth", authRoutes)
+app.use("/api/category", categoryRoutes)
+app.use("/api/story", storyRoutes)
+app.use("/api/user", userRoutes)
 app.use("/api/email", emailRoutes);
+app.use("/api/comment", commentRoutes);
 
 
-app.get('/' ,(req : Request , res :Response) =>{
+app.get('/', (req: Request, res: Response) => {
     console.log(req.body)
-    res.send("Hello World!!!") });
+    res.send("Hello World!!!")
+});
+
 
 
 export default app;
